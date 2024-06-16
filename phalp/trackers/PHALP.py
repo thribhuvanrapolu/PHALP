@@ -261,6 +261,9 @@ class PHALP(nn.Module):
                         for tkey_ in tmp_keys_:  
                             del final_visuals_dic[frame_key][tkey_] 
 
+            # extract 2d and 3d keypoints using prediction_pose for pose_transformer_v2(bert transformer evaluation) and add them to final_visual_dic
+            final_visuals_dic=self.pose_predictor.extract_2d_and_3d_keypoints(final_visuals_dic)
+                            
             joblib.dump(final_visuals_dic, pkl_path, compress=3)
             self.io_manager.close_video()
             if(self.cfg.use_gt): joblib.dump(self.tracker.tracked_cost, self.cfg.video.output_dir + '/results/' + str(self.cfg.video_seq) + '_' + str(self.cfg.phalp.start_frame) + '_distance.pkl')
